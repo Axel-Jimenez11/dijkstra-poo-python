@@ -1,55 +1,48 @@
-# Proyecto 1: Algoritmo de Dijkstra
+# Proyecto 2: Persistencia, Archivos y Excepciones
 
 **Materia:** Programación III — CUGDL, Universidad de Guadalajara
 **Autor:** Axel Salvador Jimenez Lopez
-**Fecha de creación:** 13 de octubre de 2026
 
 ## Descripción
 
-Implementación en Python 3 del algoritmo de Dijkstra para encontrar la ruta más corta en un grafo ponderado no dirigido. El programa muestra la **distancia o costo total** y la **secuencia exacta de nodos** del recorrido entre un nodo origen y uno destino.
+Programa en Python 3.10 o superior que permite capturar por consola las conexiones de una red (nodo origen, nodo destino y peso), guardarlas en un archivo CSV, cargar el grafo desde ese archivo y calcular la ruta más corta con el algoritmo de Dijkstra del Proyecto 1.
 
-## Diseño (POO)
+## Estructura
 
-| Clase | Responsabilidad |
-|---|---|
-| `Nodo` | Guarda el nombre del nodo y su lista de vecinos. |
-| `Conexion` | Representa una arista con origen, destino y peso. |
-| `Grafo` | Construye el grafo, ejecuta Dijkstra y reconstruye la ruta. |
-
-El ciclo principal de Dijkstra y la reconstrucción del camino se implementaron con **recursividad**:
-
-- `buscar_nodo_mas_cercano`: encuentra el nodo no visitado con menor distancia.
-- `buscar_ruta`: sustituye el `while` principal del algoritmo.
-- `construir_camino`: arma la ruta desde el destino hasta el origen.
-
-## Requisitos
-
-- Python 3.x
-- No requiere librerías externas.
+```
+.
+├── main.py            # Menú interactivo y captura de datos
+├── grafo.py           # Clases Nodo, Conexion y Grafo (Dijkstra)
+├── io_handler.py      # Lectura, escritura y validación del CSV
+├── nodos.csv          # Conexiones de la red
+├── requirements.txt   # Dependencias de desarrollo (flake8, ruff)
+└── README.md
+```
 
 ## Ejecución
 
-```bash
-python dijkstra_recursivo.py
+```powershell
+py -m pip install -r requirements.txt
+py main.py
 ```
 
+Opciones del menú:
+
+1. **Agregar conexión:** pide origen, destino y peso. Si el peso es texto, está vacío o es negativo, muestra el error y lo vuelve a pedir. Los datos válidos se agregan a `nodos.csv`.
+2. **Calcular ruta más corta:** carga `nodos.csv`, pide un nodo de inicio y uno de destino, y muestra la ruta y el costo total.
+3. **Salir.**
+
+## Formato de `nodos.csv`
+
+```
+Origen,Destino,Peso
+A,B,4
+A,C,2
+```
+
+Si una fila está dañada (falta una columna, peso con texto o negativo), el programa la omite, avisa en qué línea ocurrió y continúa con las demás.
+
 ## Ejemplo
-
-Grafo de prueba (`CONEXIONES_BASICAS`):
-
-| Origen | Destino | Peso |
-|---|---|---|
-| A | B | 4 |
-| A | C | 2 |
-| B | C | 1 |
-| B | D | 5 |
-| C | D | 8 |
-| C | E | 10 |
-| D | E | 2 |
-| D | F | 6 |
-| E | F | 3 |
-
-Salida esperada:
 
 ```
 Camino minimo de A a F:
@@ -57,6 +50,11 @@ A -> C -> B -> D -> E -> F
 Distancia/costo total: 13
 ```
 
-## Personalización
+## Calidad de código
 
-Para usar otro grafo, edita la lista `CONEXIONES_BASICAS` y cambia los nodos en la llamada `grafo.dijkstra("A", "F")`.
+```powershell
+py -m flake8
+py -m ruff check
+```
+
+Ambos comandos deben terminar sin advertencias.
