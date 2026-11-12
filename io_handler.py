@@ -64,9 +64,12 @@ def convertir_fila(fila: dict[str, str | None]) -> Arista:
     return origen, destino, peso
 
 
-# Lee el CSV fila por fila y omite las filas inválidas.
-def cargar_conexiones(ruta: Path = RUTA_CSV) -> list[Arista]:
+# Lee el CSV fila por fila y regresa las conexiones válidas y los avisos.
+def cargar_conexiones(
+    ruta: Path = RUTA_CSV,
+) -> tuple[list[Arista], list[str]]:
     conexiones: list[Arista] = []
+    avisos: list[str] = []
 
     try:
         with open(ruta, newline="", encoding="utf-8-sig") as archivo:
@@ -77,15 +80,19 @@ def cargar_conexiones(ruta: Path = RUTA_CSV) -> list[Arista]:
                     conexiones.append(convertir_fila(fila))
                 except KeyError as error:
                     # Falta una columna o encabezado en el CSV.
-                    print(f"Línea {lector.line_num} omitida: falta {error}.")
+                    avisos.append(
+                        f"Línea {lector.line_num} omitida: falta {error}."
+                    )
                 except ValueError as error:
                     # Dato corrupto, como un peso con texto o negativo.
-                    print(f"Línea {lector.line_num} omitida: {error}")
+                    avisos.append(
+                        f"Línea {lector.line_num} omitida: {error}"
+                    )
     except FileNotFoundError:
         # El archivo aún no existe porque no se ha guardado ninguna conexión.
-        print(f"No se encontró el archivo '{ruta.name}'.")
+        avisos.append(f"No se encontró el archivo '{ruta.name}'.")
     except (UnicodeDecodeError, csv.Error) as error:
         # El archivo está dañado y no se puede interpretar como CSV.
-        print(f"No se pudo leer '{ruta.name}': {error}")
+        avisos.append(f"No se pudo leer '{ruta.name}': {error}")
 
-    return conexiones
+    return conexiones, avisos

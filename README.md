@@ -1,21 +1,24 @@
-# Proyecto 2: Persistencia, Archivos y Excepciones
+# Proyecto 3: Interfaz web con Streamlit para Dijkstra
 
 **Materia:** Programación III — CUGDL, Universidad de Guadalajara
 **Autor:** Axel Salvador Jimenez Lopez
 
 ## Descripción
 
-Programa en Python 3.10 o superior que permite capturar por consola las conexiones de una red (nodo origen, nodo destino y peso), guardarlas en un archivo CSV, cargar el grafo desde ese archivo y calcular la ruta más corta con el algoritmo de Dijkstra del Proyecto 1.
+Aplicación web en Python 3.10 o superior que continúa el Proyecto 2. Permite agregar conexiones de una red a `nodos.csv`, ver siempre la tabla de nodos actualizada y calcular la ruta más corta entre dos nodos con el algoritmo de Dijkstra, todo desde una interfaz hecha con Streamlit.
 
 ## Estructura
 
 ```
 .
-├── main.py            # Menú interactivo y captura de datos
+├── .streamlit/
+│   └── config.toml    # Colores y tema de la aplicación
+├── main.py            # Interfaz Streamlit
 ├── grafo.py           # Clases Nodo, Conexion y Grafo (Dijkstra)
 ├── io_handler.py      # Lectura, escritura y validación del CSV
 ├── nodos.csv          # Conexiones de la red
-├── requirements.txt   # Dependencias de desarrollo (flake8, ruff)
+├── portada.png        # Imagen de portada
+├── requirements.txt   # Dependencias (streamlit y herramientas de calidad)
 └── README.md
 ```
 
@@ -23,14 +26,17 @@ Programa en Python 3.10 o superior que permite capturar por consola las conexion
 
 ```powershell
 py -m pip install -r requirements.txt
-py main.py
+py -m streamlit run main.py
 ```
 
-Opciones del menú:
+Se abre en el navegador, normalmente en `http://localhost:8501`. La primera vez Streamlit puede pedir un correo en la terminal; presiona Enter para omitirlo.
 
-1. **Agregar conexión:** pide origen, destino y peso. Si el peso es texto, está vacío o es negativo, muestra el error y lo vuelve a pedir. Los datos válidos se agregan a `nodos.csv`.
-2. **Calcular ruta más corta:** carga `nodos.csv`, pide un nodo de inicio y uno de destino, y muestra la ruta y el costo total.
-3. **Salir.**
+## Cómo funciona
+
+- **Portada:** título, imagen y los tres pasos de uso.
+- **Pestaña Agregar conexión:** formulario con origen, destino y peso. Si el peso es texto, está vacío o es negativo, muestra el error sin guardar nada.
+- **Pestaña Calcular ruta más corta:** selectores de inicio y destino. Muestra el costo total, la secuencia de nodos y el grafo con la ruta resaltada.
+- **Panel derecho:** tabla de conexiones y totales siempre visibles. Las conexiones nuevas aparecen arriba. Si una fila del CSV está dañada, se omite y se avisa.
 
 ## Formato de `nodos.csv`
 
@@ -40,21 +46,12 @@ A,B,4
 A,C,2
 ```
 
-Si una fila está dañada (falta una columna, peso con texto o negativo), el programa la omite, avisa en qué línea ocurrió y continúa con las demás.
-
-## Ejemplo
-
-```
-Camino minimo de A a F:
-A -> C -> B -> D -> E -> F
-Distancia/costo total: 13
-```
-
 ## Calidad de código
 
 ```powershell
 py -m flake8
 py -m ruff check
+py -m mypy --strict main.py grafo.py io_handler.py
 ```
 
-Ambos comandos deben terminar sin advertencias.
+Los tres comandos deben terminar sin advertencias.
