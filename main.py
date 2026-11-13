@@ -2,9 +2,9 @@
 Titulo: Proyecto 3: Interfaz web con Streamlit para el algoritmo de Dijkstra
 Nombre completo: Axel Salvador Jimenez Lopez
 Fecha de creación: 12 de noviembre del 2026
-Descripcion: Aplicación web que continúa el Proyecto 2. Permite agregar
-conexiones a nodos.csv, ver la tabla de nodos siempre actualizada y calcular
-la ruta más corta con el algoritmo de Dijkstra desde una interfaz Streamlit.
+Descripcion: Permite agregar conexiones a nodos.csv, ver la tabla de nodos 
+siempre actualizada y calcular la ruta más corta con el algoritmo de Dijkstra 
+desde una interfaz Streamlit.
 """
 
 from itertools import pairwise
